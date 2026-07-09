@@ -395,13 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
       isValid = false;
     }
 
-    const leadRelocation = document.getElementById('lead-relocation');
-    if (!leadRelocation.value) {
-      leadRelocation.classList.add('invalid');
-      shakeElement(leadRelocation);
-      isValid = false;
-    }
-
     const leadStream = document.getElementById('lead-stream');
     if (!leadStream.value.trim()) {
       leadStream.classList.add('invalid');
@@ -444,7 +437,6 @@ document.addEventListener('DOMContentLoaded', () => {
         email: leadEmail.value,
         phone: leadPhone.value,
         dob: leadDob.value,
-        relocation: leadRelocation.value,
         stream: leadStream.value
       }
     };
@@ -488,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'Contacting bank gateway...',
       'Securing sandbox connection...',
       'Confirming slot availability at Space...',
-      'Syncing lead details to Zoho CRM...',
+      'Finalising your registration...',
       'Generating seat passes...'
     ];
 

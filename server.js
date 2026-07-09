@@ -80,24 +80,20 @@ app.post('/api/register', async (req, res) => {
       });
     }
 
-    const relocationTag = data.lead.relocation !== 'unwilling' ? 'Relocation-Confirmed' : 'Relocation-Declined';
-
     // Map data to Zoho Lead schema fields
     const zohoLead = {
       First_Name: firstName || undefined,
       Last_Name: lastName,
       Email: data.lead.email,
       Phone: data.lead.phone,
-      COB_Date_Of_Birth: data.lead.dob, // custom field matching config
-      Relocation_Willingness: data.lead.relocation, // custom field matching config
-      Registration_Type: data.type === 'team' ? 'Team' : 'Individual', // custom field matching config
+      COB_Date_Of_Birth: data.lead.dob,
+      Registration_Type: data.type === 'team' ? 'Team' : 'Individual',
       Lead_Source: 'Founder Sprint Landing Page',
       Lead_Status: 'Sprint-Fee-Paid',
       Description: descriptionText,
       Tag: [
         { name: 'Sprint-Fee-Paid' },
-        { name: 'Age-Verified' },
-        { name: relocationTag }
+        { name: 'Age-Verified' }
       ]
     };
 
