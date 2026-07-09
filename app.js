@@ -100,9 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       
       // Modal scale and spring slide-up
-      gsap.fromTo(modal, 
-        { scale: 0.92, opacity: 0, x: '-50%', y: '-45%' },
-        { scale: 1, opacity: 1, x: '-50%', y: '-50%', duration: 0.45, ease: 'back.out(1.5)' }
+      gsap.fromTo(modal,
+        { scale: 0.92, opacity: 0, xPercent: -50, yPercent: -45 },
+        { scale: 1, opacity: 1, xPercent: -50, yPercent: -50, duration: 0.45, ease: 'back.out(1.5)' }
       );
     } else {
       modalBackdrop.style.opacity = '1';
