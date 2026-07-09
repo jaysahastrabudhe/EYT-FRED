@@ -339,6 +339,23 @@ app.get('/api/verify-order/:orderId', async (req, res) => {
   }
 });
 
+// ── Temp: notification test ──────────────────────────────────────────────────
+app.get('/api/test-notifications', async (req, res) => {
+  const name  = 'Test User';
+  const phone = req.query.phone || '917410788808';
+  const email = req.query.email || 'hi@letsenterprise.in';
+  const testOrderId = 'TEST' + Date.now().toString(36).slice(-5).toUpperCase();
+  const [wa, em] = await Promise.allSettled([
+    sendWhatsApp(phone, name, testOrderId),
+    sendConfirmationEmail(email, name, testOrderId, 'individual', 500)
+  ]);
+  res.json({
+    order_id: testOrderId,
+    whatsapp: wa.status === 'fulfilled' ? 'sent (no error)' : (wa.reason?.message || 'failed'),
+    email:    em.status === 'fulfilled' ? 'sent (no error)' : (em.reason?.message || 'failed')
+  });
+});
+
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`\n==================================================`);
