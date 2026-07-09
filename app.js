@@ -580,86 +580,27 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   
   function submitToZohoCRM(data) {
-    console.log('%cSyncing Lead to Zoho CRM...', 'color: #00CEC8; font-weight: bold;');
+    console.log('%cSyncing Lead to Zoho CRM API via server backend...', 'color: #00CEC8; font-weight: bold;');
     console.log('Payload Details:', data);
 
-    const config = window.ZOHO_CONFIG;
-    
-    // Create standard hidden form dynamically in body to trigger post submit inside hidden iframe
-    const iframeId = 'zoho-submit-iframe';
-    let iframe = document.getElementById(iframeId);
-    if (!iframe) {
-      iframe = document.createElement('iframe');
-      iframe.id = iframeId;
-      iframe.name = iframeId;
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-    }
-    
-    const tempForm = document.createElement('form');
-    tempForm.method = 'POST';
-    tempForm.action = config.submitUrl;
-    tempForm.target = iframeId;
-    
-    // Zoho Security Parameters
-    addHiddenField(tempForm, 'xnQsjsdp', config.xnQsjsdp);
-    addHiddenField(tempForm, 'xmGndsaC', config.xmGndsaC);
-    addHiddenField(tempForm, 'actionType', config.actionType);
-    addHiddenField(tempForm, 'returnURL', config.returnURL);
-    
-    // Map Lead details
-    const mappedFields = config.fields;
-    
-    // Names: Zoho CRM Web-to-Lead standard is Last Name (Required) and First Name
-    const nameParts = data.lead.name.trim().split(' ');
-    const lastName = nameParts.length > 1 ? nameParts.pop() : data.lead.name;
-    const firstName = nameParts.join(' ');
-    
-    addHiddenField(tempForm, mappedFields.firstName, firstName);
-    addHiddenField(tempForm, mappedFields.lastName, lastName);
-    addHiddenField(tempForm, mappedFields.email, data.lead.email);
-    addHiddenField(tempForm, mappedFields.phone, data.lead.phone);
-    addHiddenField(tempForm, mappedFields.dob, data.lead.dob);
-    addHiddenField(tempForm, mappedFields.relocation, data.lead.relocation);
-    addHiddenField(tempForm, mappedFields.registrationType, data.type);
-    addHiddenField(tempForm, mappedFields.leadSource, 'Founder Sprint Landing Page');
-    
-    // Set Tags
-    const relocationTag = data.lead.relocation !== 'unwilling' ? 'Relocation-Confirmed' : 'Relocation-Declined';
-    const finalTags = `Sprint-Fee-Paid, ${relocationTag}, Age-Verified`;
-    addHiddenField(tempForm, mappedFields.leadTags, finalTags);
-    addHiddenField(tempForm, 'lead_status', 'Sprint-Fee-Paid');
-
-    // If Team Registration, compile Teammates data into description
-    if (data.type === 'team' && data.teammates) {
-      let descriptionText = `TEAM REGISTRATION:\n`;
-      data.teammates.forEach((tm, idx) => {
-        descriptionText += `\nTeammate ${idx + 2}:\nName: ${tm.name}\nEmail: ${tm.email}\nPhone: ${tm.phone}\nDOB: ${tm.dob}\n`;
-      });
-      addHiddenField(tempForm, mappedFields.description, descriptionText);
-    }
-    
-    document.body.appendChild(tempForm);
-    
-    try {
-      tempForm.submit();
-      console.log('%cZoho CRM Form successfully submitted to background iframe target.', 'color: #10b981;');
-    } catch (err) {
-      console.error('Error submitting form to Zoho CRM:', err);
-    }
-    
-    // Clean up temporary form
-    setTimeout(() => {
-      document.body.removeChild(tempForm);
-    }, 1000);
-  }
-  
-  function addHiddenField(form, name, value) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = name;
-    input.value = value || '';
-    form.appendChild(input);
+    fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(resData => {
+      if (resData.success) {
+        console.log('%cLead synced successfully to Zoho CRM. Lead ID: ' + resData.id, 'color: #10b981;');
+      } else {
+        console.error('Zoho CRM Sync failed:', resData.error || resData);
+      }
+    })
+    .catch(err => {
+      console.error('Error fetching Zoho CRM registration endpoint:', err);
+    });
   }
 
 });
