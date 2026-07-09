@@ -1626,6 +1626,34 @@ main { position: relative; z-index: 1; }
   flex-shrink: 0;
 }
 
+.founder-avatar-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  border: 2px solid rgba(0,97,227,0.4);
+  flex-shrink: 0;
+}
+
+.founder-linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #0061E3;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: color 0.2s, gap 0.2s;
+}
+
+.founder-linkedin:hover {
+  color: var(--cyan);
+  gap: 8px;
+}
+
 .founder-name {
   margin: 0;
   font-weight: 700;
