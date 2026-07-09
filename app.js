@@ -86,25 +86,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Modal Opening Animation (with GSAP & vanilla JS fallback)
   function openModal(modal) {
-    modalBackdrop.style.display = 'block';
+    modalBackdrop.style.display = 'flex';
     modal.style.display = 'block';
-    
+
     if (isGsapLoaded) {
-      // Backdrop Fade
-      gsap.fromTo(modalBackdrop, 
+      gsap.fromTo(modalBackdrop,
         { opacity: 0 },
         { opacity: 1, duration: 0.3, ease: 'power2.out' }
       );
-      
-      // Modal scale and spring slide-up
       gsap.fromTo(modal,
-        { scale: 0.92, opacity: 0, xPercent: -50, yPercent: -45 },
-        { scale: 1, opacity: 1, xPercent: -50, yPercent: -50, duration: 0.45, ease: 'back.out(1.5)' }
+        { scale: 0.92, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.5)' }
       );
     } else {
       modalBackdrop.style.opacity = '1';
       modal.style.opacity = '1';
-      modal.style.transform = 'translate(-50%, -50%) scale(1)';
     }
   }
 
@@ -132,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       modal.style.display = 'none';
       modalBackdrop.style.display = 'none';
+      modalBackdrop.style.opacity = '0';
     }
   }
 
