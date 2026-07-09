@@ -311,22 +311,24 @@ app.get('/api/verify-order/:orderId', async (req, res) => {
       return res.json({ success: false, status: order_status });
     }
 
-    // Payment confirmed — fire all background tasks without blocking response
+    // Payment confirmed — await all post-payment tasks before responding
+    // (Vercel serverless kills background work after res.json, so we must await)
     const pending = pendingRegistrations.get(orderId);
     if (pending) {
       pendingRegistrations.delete(orderId);
       const { data } = pending;
       const amount = data.type === 'team' ? 1000 : 500;
 
-      submitZohoLead(data).catch(err =>
-        console.error(`Zoho submission failed for ${orderId}:`, err.message)
-      );
-      sendWhatsApp(data.lead.phone, data.lead.name, orderId).catch(err =>
-        console.error(`WhatsApp failed for ${orderId}:`, err.message)
-      );
-      sendConfirmationEmail(data.lead.email, data.lead.name, orderId, data.type, amount).catch(err =>
-        console.error(`Email failed for ${orderId}:`, err.message)
-      );
+      const results = await Promise.allSettled([
+        submitZohoLead(data),
+        sendWhatsApp(data.lead.phone, data.lead.name, orderId),
+        sendConfirmationEmail(data.lead.email, data.lead.name, orderId, data.type, amount)
+      ]);
+      const labels = ['Zoho', 'WhatsApp', 'Email'];
+      results.forEach((r, i) => {
+        if (r.status === 'rejected')
+          console.error(`${labels[i]} failed for ${orderId}:`, r.reason?.message);
+      });
     }
 
     res.json({ success: true, order_id: orderId, amount: order_amount });
