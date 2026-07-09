@@ -1572,7 +1572,7 @@ main { position: relative; z-index: 1; }
    FOUNDER MESSAGE
 ══════════════════════════════════════════ */
 .founder-section {
-  padding: var(--section-pad) 0;
+  padding: 88px 0;
   background: linear-gradient(135deg, rgba(0,97,227,0.06) 0%, transparent 60%);
   border-top: 1px solid rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -1648,7 +1648,7 @@ main { position: relative; z-index: 1; }
    NETWORKING + LINKEDIN SECTION
 ══════════════════════════════════════════ */
 .network-section {
-  padding: var(--section-pad) 0;
+  padding: 88px 0;
 }
 
 .network-grid {
