@@ -22,9 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const priceDisplay = document.getElementById('price-display');
   
   const payConfirmBtn = document.getElementById('pay-confirm-btn');
-  const paymentProgressContainer = document.getElementById('payment-loader');
-  const paymentProgressBar = document.querySelector('.payment-progress-bar');
-  const paymentStatusText = document.querySelector('.payment-status-text');
   
   const successDoneBtn = document.getElementById('success-done-btn');
   
@@ -471,128 +468,70 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300);
   });
 
-  // Simulated payment confirm action using GSAP progress loader
-  payConfirmBtn.addEventListener('click', () => {
-    payConfirmBtn.style.display = 'none';
-    paymentProgressContainer.style.display = 'flex';
-    
-    const statuses = [
-      'Contacting bank gateway...',
-      'Securing sandbox connection...',
-      'Confirming slot availability at Space...',
-      'Finalising your registration...',
-      'Generating seat passes...'
-    ];
+  // Cashfree payment — create server-side order, then redirect to hosted checkout
+  payConfirmBtn.addEventListener('click', async () => {
+    payConfirmBtn.disabled = true;
+    payConfirmBtn.textContent = 'Creating order…';
 
-    let currentStatusIdx = 0;
-    const statusInterval = setInterval(() => {
-      if (currentStatusIdx < statuses.length - 1) {
-        currentStatusIdx++;
-        paymentStatusText.textContent = statuses[currentStatusIdx];
-      }
-    }, 700);
+    try {
+      const res = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(registrationData)
+      });
+      const { payment_session_id, error } = await res.json();
+      if (!payment_session_id) throw new Error(error || 'Order creation failed');
 
-    // Progress animation (GSAP with vanilla fallback)
-    if (isGsapLoaded) {
-      gsap.fromTo('.payment-progress-bar', 
-        { width: '0%' },
-        { 
-          width: '100%', 
-          duration: 3.5, 
-          ease: 'power2.inOut',
-          onComplete: () => {
-            clearInterval(statusInterval);
-            
-            // Formulate Zoho Submission Payload and send it in background
-            submitToZohoCRM(registrationData);
-            
-            // Show success confirmation
-            closeModal(paymentModal);
-            
-            // Generate random Team ID
-            const generatedId = 'FSR-' + Math.floor(10000 + Math.random() * 90000);
-            document.getElementById('success-id').textContent = generatedId;
-            
-            setTimeout(() => {
-              openModal(successModal);
-              
-              // Draw checkmark using GSAP
-              gsap.fromTo('.success-checkmark__circle', 
-                { strokeDashoffset: 166 },
-                { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' }
-              );
-              
-              gsap.fromTo('.success-checkmark__check', 
-                { strokeDashoffset: 48 },
-                { strokeDashoffset: 0, duration: 0.5, delay: 0.4, ease: 'power2.out' }
-              );
-            }, 300);
-          }
-        }
-      );
-    } else {
-      paymentProgressBar.style.width = '0%';
-      // Simple layout progress simulation
-      let progressVal = 0;
-      const progressInterval = setInterval(() => {
-        progressVal += 10;
-        paymentProgressBar.style.width = `${progressVal}%`;
-        if (progressVal >= 100) {
-          clearInterval(progressInterval);
-          clearInterval(statusInterval);
-          submitToZohoCRM(registrationData);
-          closeModal(paymentModal);
-          
-          const generatedId = 'FSR-' + Math.floor(10000 + Math.random() * 90000);
-          document.getElementById('success-id').textContent = generatedId;
-          
-          setTimeout(() => {
-            openModal(successModal);
-          }, 300);
-        }
-      }, 350);
+      const cashfree = Cashfree({ mode: 'production' });
+      cashfree.checkout({ paymentSessionId: payment_session_id, redirectTarget: '_self' });
+    } catch (err) {
+      payConfirmBtn.disabled = false;
+      payConfirmBtn.textContent = 'Pay Now — Secure Gateway →';
+      alert('Could not initiate payment. Please try again or contact support.');
     }
   });
 
   // Success Done Click
   successDoneBtn.addEventListener('click', () => {
     closeModal(successModal);
-    
-    // Reset form elements
     regForm.reset();
     teammatesContainer.style.display = 'none';
     priceDisplay.textContent = '₹500';
-    payConfirmBtn.style.display = 'block';
-    paymentProgressContainer.style.display = 'none';
-    paymentStatusText.textContent = 'Processing...';
+    payConfirmBtn.disabled = false;
+    payConfirmBtn.textContent = 'Pay Now — Secure Gateway →';
   });
 
-  /* ==========================================================================
-     ZOHO CRM INTEGRATION
-     ========================================================================== */
-  
-  function submitToZohoCRM(data) {
-    console.log('%cSyncing Lead to Zoho CRM API via server backend...', 'color: #00CEC8; font-weight: bold;');
-    console.log('Payload Details:', data);
-
-    fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(resData => {
-      if (resData.success) {
-        console.log('%cLead synced successfully to Zoho CRM. Lead ID: ' + resData.id, 'color: #10b981;');
-      } else {
-        console.error('Zoho CRM Sync failed:', resData.error || resData);
-      }
-    })
-    .catch(err => {
-      console.error('Error fetching Zoho CRM registration endpoint:', err);
-    });
+  // Handle Cashfree return URL (?order_id=...)
+  const urlParams = new URLSearchParams(window.location.search);
+  const returnOrderId = urlParams.get('order_id');
+  if (returnOrderId) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    fetch(`/api/verify-order/${returnOrderId}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('success-id').textContent = returnOrderId;
+          setTimeout(() => {
+            openModal(successModal);
+            if (isGsapLoaded) {
+              gsap.fromTo('.success-checkmark__circle',
+                { strokeDashoffset: 166 },
+                { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' }
+              );
+              gsap.fromTo('.success-checkmark__check',
+                { strokeDashoffset: 48 },
+                { strokeDashoffset: 0, duration: 0.5, delay: 0.4, ease: 'power2.out' }
+              );
+            }
+          }, 400);
+        } else {
+          alert('Payment not completed. If you were charged, please contact support with order ID: ' + returnOrderId);
+        }
+      })
+      .catch(() => {
+        alert('Could not verify payment. Please contact support with order ID: ' + returnOrderId);
+      });
   }
+
 
 });

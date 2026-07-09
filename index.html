@@ -606,20 +606,15 @@
     </button>
 
     <div class="modal-head">
-      <h2 class="modal-title" id="pay-modal-heading">PAYMENT GATEWAY</h2>
-      <p class="modal-sub">Secure slot reservation — sandbox simulation environment.</p>
+      <h2 class="modal-title" id="pay-modal-heading">SECURE CHECKOUT</h2>
+      <p class="modal-sub">Your seat is confirmed instantly on payment.</p>
     </div>
 
     <div class="payment-body">
-      <div class="sim-badge">
-        <div class="sim-dot"></div>
-        <span><strong>SANDBOX MODE</strong> — Do not enter real payment data.</span>
-      </div>
-
       <div class="pay-summary">
         <div class="pay-row">
           <span id="payment-format-label">Individual Entry Slot</span>
-          <span id="payment-format-price">&#8377;500.00</span>
+          <span id="payment-format-price">&#8377;500</span>
         </div>
         <div class="pay-row">
           <span>Taxes &amp; Processing</span>
@@ -627,37 +622,14 @@
         </div>
         <div class="pay-row total">
           <span>Total Due</span>
-          <span id="payment-total-price">&#8377;500.00</span>
+          <span id="payment-total-price">&#8377;500</span>
         </div>
       </div>
 
-      <div class="dummy-fields">
-        <div class="form-group" style="margin-bottom: 14px;">
-          <label class="form-label">Test Card Number</label>
-          <input type="text" class="form-input" value="4111 2222 3333 4444" disabled aria-disabled="true">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Expiry</label>
-            <input type="text" class="form-input" value="12/29" disabled aria-disabled="true">
-          </div>
-          <div class="form-group">
-            <label class="form-label">CVV</label>
-            <input type="text" class="form-input" value="123" disabled aria-disabled="true">
-          </div>
-        </div>
-      </div>
-
-      <div class="pay-loader" id="payment-loader">
-        <div class="pay-bar-wrap">
-          <div class="payment-progress-bar"></div>
-        </div>
-        <span class="payment-status-text">Simulating authorization…</span>
-      </div>
-
-      <button id="pay-confirm-btn" class="btn btn-primary" style="width: 100%;">
-        Pay Commitment Fee &rarr;
+      <button id="pay-confirm-btn" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+        Pay Now — Secure Gateway &rarr;
       </button>
+      <p class="pay-secure-note">Secured by Cashfree Payments &middot; UPI, Cards &amp; Netbanking accepted</p>
     </div>
   </div><!-- /payment-modal -->
 
@@ -715,6 +687,7 @@
   <!-- Scripts — GSAP must load before app.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
   <script src="zoho_config.js"></script>
   <script src="app.js"></script>
 
