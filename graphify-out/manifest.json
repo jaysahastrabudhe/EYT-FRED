@@ -1,0 +1,12 @@
+{
+  "app.js": {
+    "mtime": 1783502337.4395418,
+    "ast_hash": "dac0b9b0ba0358d335f28d7276f50dc8",
+    "semantic_hash": "dac0b9b0ba0358d335f28d7276f50dc8"
+  },
+  "zoho_config.js": {
+    "mtime": 1783478055.6853876,
+    "ast_hash": "8fc40266b9d8ea9d75a7fa14126774f2",
+    "semantic_hash": "8fc40266b9d8ea9d75a7fa14126774f2"
+  }
+}

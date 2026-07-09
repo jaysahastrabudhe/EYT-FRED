@@ -1,0 +1,58 @@
+{
+  "communities": {
+    "0": [
+      "app",
+      "app_closemodal",
+      "app_openmodal",
+      "app_shakeelement",
+      "app_updatecountdown"
+    ],
+    "1": [
+      "app_addhiddenfield",
+      "app_submittozohocrm"
+    ],
+    "2": [
+      "app_checkagegate",
+      "app_parsedatestring"
+    ],
+    "3": [
+      "zoho_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.4,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+  },
+  "gods": [
+    {
+      "id": "app_parsedatestring",
+      "label": "parseDateString()",
+      "degree": 2
+    },
+    {
+      "id": "app_checkagegate",
+      "label": "checkAgeGate()",
+      "degree": 2
+    },
+    {
+      "id": "app_submittozohocrm",
+      "label": "submitToZohoCRM()",
+      "degree": 2
+    },
+    {
+      "id": "app_addhiddenfield",
+      "label": "addHiddenField()",
+      "degree": 2
+    }
+  ],
+  "surprises": [],
+  "questions": [
+    {
+      "type": "no_signal",
+      "question": null,
+      "why": "Not enough signal to generate questions. This usually means the corpus has no AMBIGUOUS edges, no bridge nodes, no INFERRED relationships, and all communities are tightly cohesive. Add more files or run with --mode deep to extract richer edges."
+    }
+  ]
+}

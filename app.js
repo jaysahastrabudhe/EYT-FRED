@@ -1,0 +1,665 @@
+document.addEventListener('DOMContentLoaded', () => {
+  
+  /* ==========================================================================
+     DOM ELEMENTS
+     ========================================================================== */
+  const heroCta = document.getElementById('hero-cta-btn');
+  const bottomCtaBtn = document.getElementById('bottom-cta-btn');
+  const stickyCtaBar = document.getElementById('sticky-cta-bar');
+  const stickyRegisterBtn = document.getElementById('sticky-register-btn');
+  
+  const regModal = document.getElementById('reg-modal');
+  const paymentModal = document.getElementById('payment-modal');
+  const successModal = document.getElementById('success-modal');
+  const modalBackdrop = document.getElementById('modal-backdrop');
+  
+  const regClose = document.getElementById('reg-modal-close');
+  const paymentClose = document.getElementById('payment-modal-close');
+  
+  const regForm = document.getElementById('reg-form');
+  const regTypeSelect = document.getElementById('reg-type');
+  const teammatesContainer = document.getElementById('teammates-container');
+  const priceDisplay = document.getElementById('price-display');
+  
+  const payConfirmBtn = document.getElementById('pay-confirm-btn');
+  const paymentProgressContainer = document.getElementById('payment-loader');
+  const paymentProgressBar = document.querySelector('.payment-progress-bar');
+  const paymentStatusText = document.querySelector('.payment-status-text');
+  
+  const successDoneBtn = document.getElementById('success-done-btn');
+  
+  // Registration data cached during steps
+  let registrationData = {};
+  
+  /* ==========================================================================
+     GSAP INTERACTIVE ANIMATIONS
+     ========================================================================== */
+  
+  // Safety wrapper in case GSAP/ScrollTrigger fails to load (offline or CDN blocked)
+  const isGsapLoaded = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+
+  if (isGsapLoaded) {
+    // Hide elements synchronously on DOM load to prevent Flash of Unstyled Content (FOUC)
+    gsap.set('.animate-scroll', { opacity: 0, y: 30 });
+    gsap.set('.animate-bento', { opacity: 0, y: 40, scale: 0.95 });
+
+    // Register ScrollTrigger Plugin
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 1. Hero Load Animations using GSAP
+    gsap.from('.animate-hero', {
+      y: 35,
+      opacity: 0,
+      duration: 0.85,
+      stagger: 0.12,
+      ease: 'power4.out',
+      delay: 0.1
+    });
+
+    // 2. Bento Grid staggered reveal ScrollTrigger
+    gsap.to('.animate-bento', {
+      scrollTrigger: {
+        trigger: '.bento-grid',
+        start: 'top 82%',
+        toggleActions: 'play none none none'
+      },
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'power3.out'
+    });
+
+    // 3. ScrollTrigger for individual scroll elements
+    document.querySelectorAll('.animate-scroll').forEach(element => {
+      gsap.to(element, {
+        scrollTrigger: {
+          trigger: element,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        },
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      });
+    });
+  }
+
+  // 3. Modal Opening Animation (with GSAP & vanilla JS fallback)
+  function openModal(modal) {
+    modalBackdrop.style.display = 'block';
+    modal.style.display = 'block';
+    
+    if (isGsapLoaded) {
+      // Backdrop Fade
+      gsap.fromTo(modalBackdrop, 
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: 'power2.out' }
+      );
+      
+      // Modal scale and spring slide-up
+      gsap.fromTo(modal, 
+        { scale: 0.92, opacity: 0, x: '-50%', y: '-45%' },
+        { scale: 1, opacity: 1, x: '-50%', y: '-50%', duration: 0.45, ease: 'back.out(1.5)' }
+      );
+    } else {
+      modalBackdrop.style.opacity = '1';
+      modal.style.opacity = '1';
+      modal.style.transform = 'translate(-50%, -50%) scale(1)';
+    }
+  }
+
+  // 4. Modal Closing Animation (with GSAP & vanilla JS fallback)
+  function closeModal(modal) {
+    if (isGsapLoaded) {
+      gsap.to(modal, {
+        scale: 0.94,
+        opacity: 0,
+        duration: 0.25,
+        ease: 'power2.in',
+        onComplete: () => {
+          modal.style.display = 'none';
+        }
+      });
+
+      gsap.to(modalBackdrop, {
+        opacity: 0,
+        duration: 0.2,
+        ease: 'power2.in',
+        onComplete: () => {
+          modalBackdrop.style.display = 'none';
+        }
+      });
+    } else {
+      modal.style.display = 'none';
+      modalBackdrop.style.display = 'none';
+    }
+  }
+
+  // 5. Shake animation for invalid inputs using GSAP (or skip if GSAP is unavailable)
+  function shakeElement(el) {
+    if (isGsapLoaded) {
+      gsap.fromTo(el, 
+        { x: -8 },
+        { x: 8, clearProps: 'x', repeat: 5, duration: 0.05, yoyo: true, ease: 'sine.inOut' }
+      );
+    }
+  }
+
+  /* ==========================================================================
+     STICKY NAVIGATION BAR
+     ========================================================================== */
+  
+  const navbar = document.getElementById('navbar');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 480) {
+      stickyCtaBar.classList.add('visible');
+    } else {
+      stickyCtaBar.classList.remove('visible');
+    }
+    // Frosted glass navbar effect on scroll
+    if (navbar) {
+      if (window.scrollY > 60) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }
+  });
+
+  stickyRegisterBtn.addEventListener('click', () => openModal(regModal));
+  bottomCtaBtn.addEventListener('click', () => openModal(regModal));
+  if (heroCta) {
+    heroCta.addEventListener('click', () => openModal(regModal));
+  }
+  // Nav CTA button (new in redesign)
+  const navCtaBtn = document.getElementById('nav-cta-btn');
+  if (navCtaBtn) {
+    navCtaBtn.addEventListener('click', () => openModal(regModal));
+  }
+
+  /* ==========================================================================
+     LIVE EVENT COUNTDOWN TIMER
+     ========================================================================== */
+  
+  function updateCountdown() {
+    const targetDate = new Date('2026-07-18T09:00:00+05:30').getTime(); // Space Pune time zone
+    const now = new Date().getTime();
+    const difference = targetDate - now;
+
+    if (difference <= 0) {
+      document.getElementById('countdown').innerHTML = `<div class="badge" style="font-size: 1rem;">SPARK DAY IS LIVE</div>`;
+      return;
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  /* ==========================================================================
+     FAQ INTERACTIVE ACCORDION
+     ========================================================================== */
+  
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    const question = item.querySelector('.faq-question');
+    const answer = item.querySelector('.faq-answer');
+
+    question.addEventListener('click', () => {
+      const isActive = item.classList.contains('active');
+
+      // Close all other active items
+      faqItems.forEach(otherItem => {
+        if (otherItem !== item && otherItem.classList.contains('active')) {
+          otherItem.classList.remove('active');
+          const otherAnswer = otherItem.querySelector('.faq-answer');
+          if (isGsapLoaded) {
+            gsap.to(otherAnswer, { height: 0, duration: 0.3, ease: 'power2.out' });
+          } else {
+            otherAnswer.style.height = '0';
+          }
+        }
+      });
+
+      // Toggle this item
+      if (isActive) {
+        item.classList.remove('active');
+        if (isGsapLoaded) {
+          gsap.to(answer, { height: 0, duration: 0.3, ease: 'power2.out' });
+        } else {
+          answer.style.height = '0';
+        }
+      } else {
+        item.classList.add('active');
+        if (isGsapLoaded) {
+          gsap.fromTo(answer, 
+            { height: 0 },
+            { height: 'auto', duration: 0.35, ease: 'power2.out' }
+          );
+        } else {
+          answer.style.height = 'auto';
+        }
+      }
+    });
+  });
+
+  /* ==========================================================================
+     DYNAMIC REGISTRATION FORM
+     ========================================================================== */
+  
+  // Toggle teammate fields based on registration type (with new pricing ₹1,000 for team of 3)
+  regTypeSelect.addEventListener('change', (e) => {
+    const isTeam = e.target.value === 'team';
+    
+    if (isTeam) {
+      teammatesContainer.style.display = 'block';
+      priceDisplay.textContent = '₹1,000'; // Updated price for team of 3
+      
+      if (isGsapLoaded) {
+        // GSAP animate open
+        gsap.fromTo(teammatesContainer, 
+          { opacity: 0, y: -15 },
+          { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+        );
+      } else {
+        teammatesContainer.style.opacity = '1';
+      }
+      
+      // Set teammate fields as required
+      document.querySelectorAll('.teammate-field').forEach(field => {
+        field.setAttribute('required', 'true');
+      });
+    } else {
+      priceDisplay.textContent = '₹500'; // Solo price
+      
+      if (isGsapLoaded) {
+        // GSAP animate close
+        gsap.to(teammatesContainer, {
+          opacity: 0,
+          y: -15,
+          duration: 0.25,
+          ease: 'power2.in',
+          onComplete: () => {
+            teammatesContainer.style.display = 'none';
+          }
+        });
+      } else {
+        teammatesContainer.style.display = 'none';
+      }
+      
+      // Remove required attribute from teammate fields
+      document.querySelectorAll('.teammate-field').forEach(field => {
+        field.removeAttribute('required');
+        field.classList.remove('invalid');
+      });
+    }
+  });
+
+  // Helper to parse date strings across multiple local/browser formats
+  function parseDateString(str) {
+    if (!str) return null;
+    str = str.trim();
+    
+    // Check if it matches YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+      const parts = str.split('-');
+      return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    }
+    
+    // Check if it matches DD/MM/YYYY or DD-MM-YYYY
+    const parts = str.split(/[\/\-]/);
+    if (parts.length === 3) {
+      const p0 = parseInt(parts[0], 10);
+      const p1 = parseInt(parts[1], 10);
+      const p2 = parseInt(parts[2], 10);
+      
+      if (p2 >= 1000) {
+        return new Date(p2, p1 - 1, p0);
+      }
+      if (p0 >= 1000) {
+        return new Date(p0, p1 - 1, p2);
+      }
+    }
+    
+    const parsed = new Date(str);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  // Age Gate helper function: strictly 17-19 on July 18, 2026
+  function checkAgeGate(dobString) {
+    if (!dobString) return false;
+    const dob = parseDateString(dobString);
+    if (!dob) return false;
+    
+    // July 18, 2026 event day DOB bounds (month index 6 = July):
+    const minDob = new Date(2006, 6, 19); // 19 years old (turns 20 on July 18)
+    const maxDob = new Date(2009, 6, 18); // 17 years old (turns 17 on July 18)
+    
+    return dob >= minDob && dob <= maxDob;
+  }
+
+  // Handle Form Submission with validations
+  regForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    let isValid = true;
+    const formData = new FormData(regForm);
+    const type = formData.get('reg_type');
+    
+    // Clear previous invalid states
+    regForm.querySelectorAll('.form-input').forEach(input => {
+      input.classList.remove('invalid');
+    });
+
+    // 1. Validate Lead Details
+    const leadName = document.getElementById('lead-name');
+    if (!leadName.value.trim()) {
+      leadName.classList.add('invalid');
+      shakeElement(leadName);
+      isValid = false;
+    }
+
+    const leadEmail = document.getElementById('lead-email');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(leadEmail.value)) {
+      leadEmail.classList.add('invalid');
+      shakeElement(leadEmail);
+      isValid = false;
+    }
+
+    const leadPhone = document.getElementById('lead-phone');
+    const phoneRegex = /^\+?[0-9]{10,14}$/;
+    if (!phoneRegex.test(leadPhone.value.replace(/[\s-]/g, ''))) {
+      leadPhone.classList.add('invalid');
+      shakeElement(leadPhone);
+      isValid = false;
+    }
+
+    const leadDob = document.getElementById('lead-dob');
+    if (!checkAgeGate(leadDob.value)) {
+      leadDob.classList.add('invalid');
+      shakeElement(leadDob);
+      isValid = false;
+    }
+
+    const leadRelocation = document.getElementById('lead-relocation');
+    if (!leadRelocation.value) {
+      leadRelocation.classList.add('invalid');
+      shakeElement(leadRelocation);
+      isValid = false;
+    }
+
+    const leadStream = document.getElementById('lead-stream');
+    if (!leadStream.value.trim()) {
+      leadStream.classList.add('invalid');
+      shakeElement(leadStream);
+      isValid = false;
+    }
+
+    // 2. Validate Teammates if Type is Team
+    if (type === 'team') {
+      const t2Name = document.getElementById('t2-name');
+      const t2Email = document.getElementById('t2-email');
+      const t2Phone = document.getElementById('t2-phone');
+      const t2Dob = document.getElementById('t2-dob');
+
+      const t3Name = document.getElementById('t3-name');
+      const t3Email = document.getElementById('t3-email');
+      const t3Phone = document.getElementById('t3-phone');
+      const t3Dob = document.getElementById('t3-dob');
+
+      // Teammate 2 checks
+      if (!t2Name.value.trim()) { t2Name.classList.add('invalid'); shakeElement(t2Name); isValid = false; }
+      if (!emailRegex.test(t2Email.value)) { t2Email.classList.add('invalid'); shakeElement(t2Email); isValid = false; }
+      if (!phoneRegex.test(t2Phone.value.replace(/[\s-]/g, ''))) { t2Phone.classList.add('invalid'); shakeElement(t2Phone); isValid = false; }
+      if (!checkAgeGate(t2Dob.value)) { t2Dob.classList.add('invalid'); shakeElement(t2Dob); isValid = false; }
+
+      // Teammate 3 checks
+      if (!t3Name.value.trim()) { t3Name.classList.add('invalid'); shakeElement(t3Name); isValid = false; }
+      if (!emailRegex.test(t3Email.value)) { t3Email.classList.add('invalid'); shakeElement(t3Email); isValid = false; }
+      if (!phoneRegex.test(t3Phone.value.replace(/[\s-]/g, ''))) { t3Phone.classList.add('invalid'); shakeElement(t3Phone); isValid = false; }
+      if (!checkAgeGate(t3Dob.value)) { t3Dob.classList.add('invalid'); shakeElement(t3Dob); isValid = false; }
+    }
+
+    if (!isValid) return;
+
+    // Cache the validated data
+    registrationData = {
+      type: type,
+      lead: {
+        name: leadName.value,
+        email: leadEmail.value,
+        phone: leadPhone.value,
+        dob: leadDob.value,
+        relocation: leadRelocation.value,
+        stream: leadStream.value
+      }
+    };
+
+    if (type === 'team') {
+      registrationData.teammates = [
+        {
+          name: document.getElementById('t2-name').value,
+          email: document.getElementById('t2-email').value,
+          phone: document.getElementById('t2-phone').value,
+          dob: document.getElementById('t2-dob').value
+        },
+        {
+          name: document.getElementById('t3-name').value,
+          email: document.getElementById('t3-email').value,
+          phone: document.getElementById('t3-phone').value,
+          dob: document.getElementById('t3-dob').value
+        }
+      ];
+    }
+
+    // Move to payment simulation stage
+    closeModal(regModal);
+    
+    // Update Payment summary details (Adjusted total price to ₹1,000 for team of 3)
+    document.getElementById('payment-format-label').textContent = type === 'team' ? 'Team of 3 Seats' : 'Individual Seat';
+    document.getElementById('payment-format-price').textContent = type === 'team' ? '₹1,000' : '₹500';
+    document.getElementById('payment-total-price').textContent = type === 'team' ? '₹1,000' : '₹500';
+    
+    setTimeout(() => {
+      openModal(paymentModal);
+    }, 300);
+  });
+
+  // Simulated payment confirm action using GSAP progress loader
+  payConfirmBtn.addEventListener('click', () => {
+    payConfirmBtn.style.display = 'none';
+    paymentProgressContainer.style.display = 'flex';
+    
+    const statuses = [
+      'Contacting bank gateway...',
+      'Securing sandbox connection...',
+      'Confirming slot availability at Space...',
+      'Syncing lead details to Zoho CRM...',
+      'Generating seat passes...'
+    ];
+
+    let currentStatusIdx = 0;
+    const statusInterval = setInterval(() => {
+      if (currentStatusIdx < statuses.length - 1) {
+        currentStatusIdx++;
+        paymentStatusText.textContent = statuses[currentStatusIdx];
+      }
+    }, 700);
+
+    // Progress animation (GSAP with vanilla fallback)
+    if (isGsapLoaded) {
+      gsap.fromTo('.payment-progress-bar', 
+        { width: '0%' },
+        { 
+          width: '100%', 
+          duration: 3.5, 
+          ease: 'power2.inOut',
+          onComplete: () => {
+            clearInterval(statusInterval);
+            
+            // Formulate Zoho Submission Payload and send it in background
+            submitToZohoCRM(registrationData);
+            
+            // Show success confirmation
+            closeModal(paymentModal);
+            
+            // Generate random Team ID
+            const generatedId = 'FSR-' + Math.floor(10000 + Math.random() * 90000);
+            document.getElementById('success-id').textContent = generatedId;
+            
+            setTimeout(() => {
+              openModal(successModal);
+              
+              // Draw checkmark using GSAP
+              gsap.fromTo('.success-checkmark__circle', 
+                { strokeDashoffset: 166 },
+                { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' }
+              );
+              
+              gsap.fromTo('.success-checkmark__check', 
+                { strokeDashoffset: 48 },
+                { strokeDashoffset: 0, duration: 0.5, delay: 0.4, ease: 'power2.out' }
+              );
+            }, 300);
+          }
+        }
+      );
+    } else {
+      paymentProgressBar.style.width = '0%';
+      // Simple layout progress simulation
+      let progressVal = 0;
+      const progressInterval = setInterval(() => {
+        progressVal += 10;
+        paymentProgressBar.style.width = `${progressVal}%`;
+        if (progressVal >= 100) {
+          clearInterval(progressInterval);
+          clearInterval(statusInterval);
+          submitToZohoCRM(registrationData);
+          closeModal(paymentModal);
+          
+          const generatedId = 'FSR-' + Math.floor(10000 + Math.random() * 90000);
+          document.getElementById('success-id').textContent = generatedId;
+          
+          setTimeout(() => {
+            openModal(successModal);
+          }, 300);
+        }
+      }, 350);
+    }
+  });
+
+  // Success Done Click
+  successDoneBtn.addEventListener('click', () => {
+    closeModal(successModal);
+    
+    // Reset form elements
+    regForm.reset();
+    teammatesContainer.style.display = 'none';
+    priceDisplay.textContent = '₹500';
+    payConfirmBtn.style.display = 'block';
+    paymentProgressContainer.style.display = 'none';
+    paymentStatusText.textContent = 'Processing...';
+  });
+
+  /* ==========================================================================
+     ZOHO CRM INTEGRATION
+     ========================================================================== */
+  
+  function submitToZohoCRM(data) {
+    console.log('%cSyncing Lead to Zoho CRM...', 'color: #00CEC8; font-weight: bold;');
+    console.log('Payload Details:', data);
+
+    const config = window.ZOHO_CONFIG;
+    
+    // Create standard hidden form dynamically in body to trigger post submit inside hidden iframe
+    const iframeId = 'zoho-submit-iframe';
+    let iframe = document.getElementById(iframeId);
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.id = iframeId;
+      iframe.name = iframeId;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    
+    const tempForm = document.createElement('form');
+    tempForm.method = 'POST';
+    tempForm.action = config.submitUrl;
+    tempForm.target = iframeId;
+    
+    // Zoho Security Parameters
+    addHiddenField(tempForm, 'xnQsjsdp', config.xnQsjsdp);
+    addHiddenField(tempForm, 'xmGndsaC', config.xmGndsaC);
+    addHiddenField(tempForm, 'actionType', config.actionType);
+    addHiddenField(tempForm, 'returnURL', config.returnURL);
+    
+    // Map Lead details
+    const mappedFields = config.fields;
+    
+    // Names: Zoho CRM Web-to-Lead standard is Last Name (Required) and First Name
+    const nameParts = data.lead.name.trim().split(' ');
+    const lastName = nameParts.length > 1 ? nameParts.pop() : data.lead.name;
+    const firstName = nameParts.join(' ');
+    
+    addHiddenField(tempForm, mappedFields.firstName, firstName);
+    addHiddenField(tempForm, mappedFields.lastName, lastName);
+    addHiddenField(tempForm, mappedFields.email, data.lead.email);
+    addHiddenField(tempForm, mappedFields.phone, data.lead.phone);
+    addHiddenField(tempForm, mappedFields.dob, data.lead.dob);
+    addHiddenField(tempForm, mappedFields.relocation, data.lead.relocation);
+    addHiddenField(tempForm, mappedFields.registrationType, data.type);
+    addHiddenField(tempForm, mappedFields.leadSource, 'Founder Sprint Landing Page');
+    
+    // Set Tags
+    const relocationTag = data.lead.relocation !== 'unwilling' ? 'Relocation-Confirmed' : 'Relocation-Declined';
+    const finalTags = `Sprint-Fee-Paid, ${relocationTag}, Age-Verified`;
+    addHiddenField(tempForm, mappedFields.leadTags, finalTags);
+    addHiddenField(tempForm, 'lead_status', 'Sprint-Fee-Paid');
+
+    // If Team Registration, compile Teammates data into description
+    if (data.type === 'team' && data.teammates) {
+      let descriptionText = `TEAM REGISTRATION:\n`;
+      data.teammates.forEach((tm, idx) => {
+        descriptionText += `\nTeammate ${idx + 2}:\nName: ${tm.name}\nEmail: ${tm.email}\nPhone: ${tm.phone}\nDOB: ${tm.dob}\n`;
+      });
+      addHiddenField(tempForm, mappedFields.description, descriptionText);
+    }
+    
+    document.body.appendChild(tempForm);
+    
+    try {
+      tempForm.submit();
+      console.log('%cZoho CRM Form successfully submitted to background iframe target.', 'color: #10b981;');
+    } catch (err) {
+      console.error('Error submitting form to Zoho CRM:', err);
+    }
+    
+    // Clean up temporary form
+    setTimeout(() => {
+      document.body.removeChild(tempForm);
+    }, 1000);
+  }
+  
+  function addHiddenField(form, name, value) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value || '';
+    form.appendChild(input);
+  }
+
+});

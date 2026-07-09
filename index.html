@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Founder's Sprint — Earn Your Ticket | Let's Enterprise</title>
+  <meta name="description" content="One day. One shot. Pitch a growth blueprint for a local Pune business. Win 3 Fred Again concert tickets + ₹25K scholarship. July 18, 2026. Ages 17–19 only.">
+  <meta name="keywords" content="Founder Sprint, Let's Enterprise, Pune, Fred Again, Earn Your Ticket, Working BBA, teen entrepreneurship">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Decorative background grid -->
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <!-- ═══ STICKY CTA BAR ═══ -->
+  <div id="sticky-cta-bar" class="sticky-cta-bar">
+    <div class="sticky-inner">
+      <div class="sticky-info">
+        <span class="sticky-title">THE FOUNDER'S SPRINT</span>
+        <span class="sticky-date">July 18 · Let's Enterprise Space, Pune</span>
+      </div>
+      <div class="sticky-right">
+        <button id="sticky-register-btn" class="btn btn-primary btn-sm">Claim Seat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="le-logo-white.png" alt="Let's Enterprise">
+      </a>
+      <div class="nav-chip">
+        <span class="live-dot"></span>
+        JULY 18, 2026 · LET'S ENTERPRISE SPACE, PUNE
+      </div>
+      <div class="nav-right">
+        <a href="terms.html" target="_blank" class="btn btn-ghost btn-sm">T&amp;Cs</a>
+        <a href="#journey" class="btn btn-ghost btn-sm">How it works</a>
+        <button id="nav-cta-btn" class="btn btn-primary btn-sm">Register Now</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════
+         HERO SECTION
+    ══════════════════════════════════════════ -->
+    <section class="hero">
+
+      <!-- Animated gradient orbs -->
+      <div class="hero-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+      </div>
+
+      <div class="container">
+        <div class="hero-inner">
+
+          <!-- Left: Copy -->
+          <div class="hero-left">
+            <div class="hero-eyebrow animate-hero">
+              <span class="badge">
+                <span class="badge-dot"></span>
+                Ages 17–19 Only &bull; Skill-Judged Event
+              </span>
+            </div>
+
+            <h1 class="hero-headline animate-hero">
+              <span class="hl-1">ONE DAY.</span>
+              <span class="hl-2">ONE SHOT.</span>
+              <span class="hl-3">EARN YOUR TICKET.</span>
+            </h1>
+
+            <p class="hero-sub animate-hero">
+              Pitch a growth blueprint for a real Pune business. Prove your marketing instincts in a high-stakes 1-day sprint. Take home the ultimate concert reward.
+            </p>
+
+            <!-- Countdown Timer -->
+            <div class="countdown-wrap animate-hero" id="countdown">
+              <div class="countdown-unit">
+                <span class="countdown-num" id="days">00</span>
+                <span class="countdown-lbl">Days</span>
+              </div>
+              <span class="countdown-sep">:</span>
+              <div class="countdown-unit">
+                <span class="countdown-num" id="hours">00</span>
+                <span class="countdown-lbl">Hrs</span>
+              </div>
+              <span class="countdown-sep">:</span>
+              <div class="countdown-unit">
+                <span class="countdown-num" id="minutes">00</span>
+                <span class="countdown-lbl">Mins</span>
+              </div>
+              <span class="countdown-sep">:</span>
+              <div class="countdown-unit">
+                <span class="countdown-num" id="seconds">00</span>
+                <span class="countdown-lbl">Secs</span>
+              </div>
+            </div>
+
+            <!-- CTAs -->
+            <div class="hero-actions animate-hero">
+              <button id="hero-cta-btn" class="btn btn-primary btn-lg">
+                Claim Your Seat &rarr;
+              </button>
+              <a href="#journey" class="btn btn-ghost btn-lg">How it works</a>
+            </div>
+
+            <!-- Loss-aversion comparison -->
+            <div class="loss-card animate-hero">
+              <div class="loss-block">
+                <span class="loss-tag worst">Worst Case</span>
+                <p class="loss-text">A high-energy Saturday at a co-working hub — building a real marketing plan alongside active founders. Not a bad Saturday.</p>
+              </div>
+              <div class="loss-divider"></div>
+              <div class="loss-block">
+                <span class="loss-tag best">Best Case</span>
+                <p class="loss-text"><strong>3 Fred Again tickets</strong> for your team &plus; <strong>₹25K scholarship</strong> each — on enrolment in the Working BBA.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Hero Image -->
+          <div class="hero-right animate-hero">
+            <div class="hero-img-frame">
+              <img src="founders_sprint_hero.jpg" alt="Founder's Sprint participants at Let's Enterprise Space, Pune" loading="eager">
+            </div>
+
+            <!-- Floating stat: date -->
+            <div class="hero-float-card float-card-2" aria-hidden="true">
+              <span class="float-num" style="color: var(--cyan);">Jul 18</span>
+              <span class="float-lbl">Sprint Day</span>
+            </div>
+          </div>
+
+        </div><!-- /hero-inner -->
+      </div><!-- /container -->
+    </section>
+
+    <!-- ═══ TICKER STRIP ═══ -->
+    <div class="ticker-section" aria-hidden="true">
+      <div class="ticker-wrap">
+        <div class="ticker-track" id="ticker-track">
+          <!-- Set A -->
+          <span class="ticker-item hi">&#127915; Fred Again Concert Tickets</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item">&#8377;25,000 Founder's Scholarship</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item">July 18 · Let's Enterprise Space, Pune</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item hi">Ages 17–19 Only</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item">Skill-Judged · No Lottery</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item hi">One Day. One Shot.</span>
+          <span class="ticker-sep"></span>
+          <!-- Set B - duplicate for seamless infinite loop -->
+          <span class="ticker-item hi">&#127915; Fred Again Concert Tickets</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item">&#8377;25,000 Founder's Scholarship</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item">July 18 · Let's Enterprise Space, Pune</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item hi">Ages 17–19 Only</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item">Skill-Judged · No Lottery</span>
+          <span class="ticker-sep"></span>
+          <span class="ticker-item hi">One Day. One Shot.</span>
+          <span class="ticker-sep"></span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════
+         STAKES / BENTO GRID
+    ══════════════════════════════════════════ -->
+    <section class="stakes-section">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">The Prize Pool</p>
+          <h2 class="section-title animate-scroll">WHAT'S AT STAKE</h2>
+          <p class="section-sub animate-scroll">Real prizes for real builders. Earned on merit — judged by a published rubric. Never by draw or chance.</p>
+        </div>
+
+        <div class="bento-grid">
+
+          <!-- Wide: Fred Again Tickets -->
+          <div class="bento-card bento-wide animate-bento" id="card-tickets">
+            <div class="card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0-6h20a3 3 0 0 1 0 6M2 9v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9M2 9h20M12 22V9"/></svg>
+            </div>
+            <span class="card-cat">Immediate Reward</span>
+            <h3 class="card-title">3 Fred Again<br>Concert Tickets</h3>
+            <p class="card-desc">The top-performing team takes all 3 tickets to the Mumbai show this December (Dec 9). Unconditional on BBA enrolment — win the Sprint, get the tickets.</p>
+          </div>
+
+          <!-- Scholarship -->
+          <div class="bento-card animate-bento" id="card-scholarship">
+            <div class="card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+            </div>
+            <span class="card-cat">Admissions Head Start</span>
+            <h3 class="card-title">&#8377;25K Founder's Scholarship</h3>
+            <p class="card-desc">Every winning team member earns ₹25,000 towards the Working BBA — on admission and enrolment.</p>
+          </div>
+
+          <!-- Body of Work -->
+          <div class="bento-card animate-bento" id="card-bodyofwork">
+            <div class="card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <span class="card-cat">Guaranteed Outcome</span>
+            <h3 class="card-title">Verified Body of Work</h3>
+            <p class="card-desc">No participation certificates. Leave with a real case study, founder feedback, and a growth plan you can show employers.</p>
+          </div>
+
+          <!-- Venue -->
+          <div class="bento-card animate-bento" id="card-venue">
+            <div class="card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span class="card-cat">Venue &amp; Reporting</span>
+            <h3 class="card-title">Let's Enterprise Space, Pune</h3>
+            <p class="card-desc">Arrive July 18 at 8:45 AM. Let's Enterprise co-working hub built for fast-paced execution. Bring your laptop, charger, and builder mindset.</p>
+          </div>
+
+          <!-- Age Gate -->
+          <div class="bento-card animate-bento" id="card-ages">
+            <div class="card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <span class="card-cat">Participation Rules</span>
+            <h3 class="card-title">Ages 17–19 Only</h3>
+            <p class="card-desc">Strictly age-gated. Register as a team of 3, or solo — we match you with partners at 9:00 AM on Sprint Day.</p>
+          </div>
+
+        </div><!-- /bento-grid -->
+
+        <div class="disclaimer-box animate-scroll">
+          <div class="disclaimer-inner">
+            <div class="disclaimer-text-block">
+              <p class="disclaimer-label">The Legal Stuff</p>
+              <p class="disclaimer-text">Three Fred Again tickets (Mumbai, Dec 9) go to the highest-scoring team under a published, skill-judged rubric - never by draw or chance. Open to ages 17-19 only (born Jul 19 2006 to Jul 18 2009). The &#8377;25,000 scholarship applies on enrolment in the Working BBA; winning does not guarantee admission. Fred Again is not affiliated with Let's Enterprise.</p>
+            </div>
+            <a href="terms.html" target="_blank" class="btn btn-ghost btn-sm disclaimer-btn">Read Full T&amp;Cs &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         HOW IT WORKS — TIMELINE
+    ══════════════════════════════════════════ -->
+    <section class="journey-section" id="journey">
+      <div class="container">
+        <p class="section-label">The Process</p>
+        <h2 class="section-title animate-scroll">HOW IT WORKS</h2>
+        <p class="section-sub animate-scroll">Three steps. One day. Everything to gain.</p>
+
+        <div class="timeline" style="margin-top: 56px;">
+
+          <div class="timeline-step animate-scroll" id="step-1">
+            <span class="step-num">01</span>
+            <h3 class="step-title">Reserve Your Slot</h3>
+            <p class="step-desc">Pay the commitment fee and lock your seat. Register solo or as a team of 3 already. Individual builders get matched at 9 AM.</p>
+            <span class="step-tag">Commitment filter</span>
+          </div>
+
+          <div class="timeline-step animate-scroll" id="step-2">
+            <span class="step-num">02</span>
+            <h3 class="step-title">Sprint Day</h3>
+            <p class="step-desc">Join us at Let's Enterprise Space, Pune on July 18. Receive your brief, interview real shoppers, then build a full growth plan within a ₹10,000 budget constraint. Clock starts at 9 AM sharp.</p>
+            <span class="step-tag">July 18 · 1 Day</span>
+          </div>
+
+          <div class="timeline-step animate-scroll" id="step-3">
+            <span class="step-num">03</span>
+            <h3 class="step-title">Pitch &amp; Win</h3>
+            <p class="step-desc">Present to a panel of active founders. The top-scoring team takes 3 Fred Again tickets + ₹25K scholarship each. Judged entirely on merit — rubric is public and published in advance.</p>
+            <span class="step-tag">Judged on merit</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         JUDGING RUBRIC
+    ══════════════════════════════════════════ -->
+    <section class="rubric-section">
+      <div class="container">
+        <p class="section-label">Evaluation Criteria</p>
+        <h2 class="section-title animate-scroll">THE JUDGING RUBRIC</h2>
+        <p class="section-sub animate-scroll">This is a game of skill, not chance. Here's exactly how your plan is scored.</p>
+
+        <div class="rubric-grid">
+
+          <!-- Row 1: 3 cards -->
+          <div class="rubric-row">
+            <div class="rubric-card" id="rubric-1">
+              <span class="rubric-pts">20%</span>
+              <h4 class="rubric-title">Problem Understanding</h4>
+              <p class="rubric-desc">Has the team correctly identified the real problem in the brief, not just a surface symptom? Do they show evidence of thinking about who actually has this problem?</p>
+            </div>
+
+            <div class="rubric-card" id="rubric-2">
+              <span class="rubric-pts">25%</span>
+              <h4 class="rubric-title">Solution Viability</h4>
+              <p class="rubric-desc">Is the proposed solution actually buildable with realistic resources? Does it solve the stated problem, not a different one?</p>
+            </div>
+
+            <div class="rubric-card" id="rubric-3">
+              <span class="rubric-pts">25%</span>
+              <h4 class="rubric-title">Commercial Thinking</h4>
+              <p class="rubric-desc">Is there a credible path to revenue or sustainability? Have they thought about who pays, why, and how much? This is also the first tie-breaker if scores are tied.</p>
+            </div>
+          </div>
+
+          <!-- Row 2: 2 cards centered -->
+          <div class="rubric-row rubric-row-center">
+            <div class="rubric-card" id="rubric-4">
+              <span class="rubric-pts">15%</span>
+              <h4 class="rubric-title">Pitch Clarity and Delivery</h4>
+              <p class="rubric-desc">Can the team explain the idea clearly in the time given? Is the structure logical? Can they answer follow-up questions from judges without falling apart?</p>
+            </div>
+
+            <div class="rubric-card" id="rubric-5">
+              <span class="rubric-pts">15%</span>
+              <h4 class="rubric-title">Team Collaboration</h4>
+              <p class="rubric-desc">Does the pitch show evidence all 3 members contributed meaningfully? Judges may ask each member a direct question. One person carrying two silent teammates scores low here.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         FAQ
+    ══════════════════════════════════════════ -->
+    <section class="faq-section">
+      <div class="container">
+        <p class="section-label text-center">Got Questions</p>
+        <h2 class="section-title text-center animate-scroll">FAQ</h2>
+
+        <div class="faq-list">
+
+          <div class="faq-item animate-scroll" id="faq-1">
+            <button class="faq-question" aria-expanded="false">
+              Why is there a fee if the tickets are the prize?
+              <div class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-body">The fee is a show-rate filter. A commitment fee ensures slots go only to builders who will actually turn up — not casual sign-ups taking space away from serious candidates.</div>
+            </div>
+          </div>
+
+          <div class="faq-item animate-scroll" id="faq-2">
+            <button class="faq-question" aria-expanded="false">
+              Can I register as an individual?
+              <div class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-body">Yes. Pay the ₹500 solo fee and we'll match you with two other builders at 9:00 AM on Sprint Day. If you already have a full team of 3, choose "Team of 3" for the ₹1,000 combined entry.</div>
+            </div>
+          </div>
+
+          <div class="faq-item animate-scroll" id="faq-3">
+            <button class="faq-question" aria-expanded="false">
+              What's the exact age restriction?
+              <div class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-body">You must be 17–19 years old on July 18, 2026. That means born between <strong>July 19, 2006 and July 18, 2009</strong>. Government-issued ID is verified at check-in before the Sprint begins. No exceptions.</div>
+            </div>
+          </div>
+
+          <div class="faq-item animate-scroll" id="faq-4">
+            <button class="faq-question" aria-expanded="false">
+              Is the registration fee refundable?
+              <div class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-body">Generally no — the fee functions as a commitment filter. However, if your application is rejected due to failing the age gate, a full automatic refund is processed within 5–7 business days. Read the full <a href="terms.html" target="_blank">Terms &amp; Conditions</a>.</div>
+            </div>
+          </div>
+
+        </div><!-- /faq-list -->
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         FINAL CTA
+    ══════════════════════════════════════════ -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-inner">
+          <p class="section-label text-center" style="justify-content: center; margin-bottom: 24px;">
+            July 18 &bull; Let's Enterprise Space, Pune
+          </p>
+          <h2 class="cta-title animate-scroll">READY TO<br>EARN IT?</h2>
+          <p class="cta-sub animate-scroll">This is a skill competition. Show up, build real, and take everything.</p>
+          <button id="bottom-cta-btn" class="btn btn-primary btn-lg animate-scroll">
+            Claim Your Seat &rarr;
+          </button>
+          <p class="cta-meta animate-scroll">&#8377;500 solo &nbsp;&bull;&nbsp; &#8377;1,000 for a team of 3 &nbsp;&bull;&nbsp; Ages 17-19 only</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <img src="le-logo-white.png" alt="Let's Enterprise" style="height: 26px; opacity: 0.65; margin-bottom: 6px;">
+          <p class="footer-copy">&copy; 2026 Let's Enterprise. Let's Enterprise Space, Pune.</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="terms.html" target="_blank" class="footer-link">Terms &amp; Conditions</a>
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       MODAL BACKDROP
+  ══════════════════════════════════════════════ -->
+  <div id="modal-backdrop" class="modal-backdrop"></div>
+
+
+  <!-- ═══════════════════════════════════════════
+       REGISTRATION MODAL
+  ══════════════════════════════════════════════ -->
+  <div id="reg-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="reg-modal-heading">
+
+    <button class="modal-close" id="reg-modal-close" aria-label="Close registration form">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <div class="modal-head">
+      <h2 class="modal-title" id="reg-modal-heading">CLAIM YOUR SEAT</h2>
+      <p class="modal-sub">Reserve your spot for the Founder's Sprint on July 18, 2026.</p>
+    </div>
+
+    <form id="reg-form" novalidate>
+      <div class="form-scroll">
+
+        <!-- Format select -->
+        <p class="form-section">Registration Format</p>
+        <div class="form-group">
+          <label class="form-label" for="reg-type">Entry Type</label>
+          <select class="form-input" id="reg-type" name="reg_type" required>
+            <option value="solo">Individual Entry — &#8377;500</option>
+            <option value="team">Team of 3 — &#8377;1,000 total</option>
+          </select>
+        </div>
+
+        <!-- Lead builder -->
+        <p class="form-section">Lead Builder — You</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="lead-name">Full Name</label>
+            <input type="text" class="form-input" id="lead-name" name="lead_name" placeholder="Jane Doe" autocomplete="name" required>
+            <span class="form-error" id="error-lead-name">Full name is required.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lead-email">Email Address</label>
+            <input type="email" class="form-input" id="lead-email" name="lead_email" placeholder="jane@example.com" autocomplete="email" required>
+            <span class="form-error" id="error-lead-email">A valid email is required.</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="lead-phone">WhatsApp Number</label>
+            <input type="tel" class="form-input" id="lead-phone" name="lead_phone" placeholder="9876543210" autocomplete="tel" required>
+            <span class="form-error" id="error-lead-phone">Enter a valid 10-digit number.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lead-dob">Date of Birth</label>
+            <input type="date" class="form-input" id="lead-dob" name="lead_dob" required>
+            <span class="form-error" id="error-lead-dob">Must be 17–19 (born Jul 19 2006 – Jul 18 2009).</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="lead-relocation">Relocation Willingness</label>
+            <select class="form-input" id="lead-relocation" name="lead_relocation" required>
+              <option value="">Select an option…</option>
+              <option value="willing">Willing to relocate to Pune</option>
+              <option value="pune-local">Already in Pune</option>
+              <option value="unwilling">Not willing to relocate</option>
+            </select>
+            <span class="form-error" id="error-lead-relocation">Please select an option.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lead-stream">High School Stream</label>
+            <select class="form-input" id="lead-stream" name="lead_stream" required>
+              <option value="">Select stream…</option>
+              <option value="Commerce">Commerce</option>
+              <option value="Science">Science</option>
+              <option value="Arts">Arts / Humanities</option>
+              <option value="Other">Other</option>
+            </select>
+            <span class="form-error" id="error-lead-stream">Please select your stream.</span>
+          </div>
+        </div>
+
+        <!-- Teammates section (shown for team registrations) -->
+        <div id="teammates-container" class="teammates-inputs-section" style="display: none;">
+
+          <p class="form-section">Teammate 2</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="t2-name">Full Name</label>
+              <input type="text" class="form-input teammate-field" id="t2-name" name="t2_name" placeholder="Teammate 2">
+              <span class="form-error" id="error-t2-name">Name is required.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t2-email">Email</label>
+              <input type="email" class="form-input teammate-field" id="t2-email" name="t2_email" placeholder="teammate2@example.com">
+              <span class="form-error" id="error-t2-email">Valid email required.</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="t2-phone">WhatsApp Number</label>
+              <input type="tel" class="form-input teammate-field" id="t2-phone" name="t2_phone" placeholder="9876543210">
+              <span class="form-error" id="error-t2-phone">Valid 10-digit number required.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t2-dob">Date of Birth</label>
+              <input type="date" class="form-input teammate-field" id="t2-dob" name="t2_dob">
+              <span class="form-error" id="error-t2-dob">Must be 17–19 (born Jul 19 2006 – Jul 18 2009).</span>
+            </div>
+          </div>
+
+          <p class="form-section">Teammate 3</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="t3-name">Full Name</label>
+              <input type="text" class="form-input teammate-field" id="t3-name" name="t3_name" placeholder="Teammate 3">
+              <span class="form-error" id="error-t3-name">Name is required.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t3-email">Email</label>
+              <input type="email" class="form-input teammate-field" id="t3-email" name="t3_email" placeholder="teammate3@example.com">
+              <span class="form-error" id="error-t3-email">Valid email required.</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="t3-phone">WhatsApp Number</label>
+              <input type="tel" class="form-input teammate-field" id="t3-phone" name="t3_phone" placeholder="9876543210">
+              <span class="form-error" id="error-t3-phone">Valid 10-digit number required.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t3-dob">Date of Birth</label>
+              <input type="date" class="form-input teammate-field" id="t3-dob" name="t3_dob">
+              <span class="form-error" id="error-t3-dob">Must be 17–19 (born Jul 19 2006 – Jul 18 2009).</span>
+            </div>
+          </div>
+
+        </div><!-- /teammates-container -->
+
+      </div><!-- /form-scroll -->
+
+      <div class="modal-foot">
+        <div class="price-wrap">
+          <span class="price-lbl">Amount Payable</span>
+          <span class="price-val" id="price-display">&#8377;500</span>
+        </div>
+        <button type="submit" class="btn btn-primary">Proceed to Payment &rarr;</button>
+      </div>
+    </form>
+  </div><!-- /reg-modal -->
+
+
+  <!-- ═══════════════════════════════════════════
+       PAYMENT MODAL
+  ══════════════════════════════════════════════ -->
+  <div id="payment-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pay-modal-heading">
+
+    <button class="modal-close" id="payment-modal-close" aria-label="Close payment">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <div class="modal-head">
+      <h2 class="modal-title" id="pay-modal-heading">PAYMENT GATEWAY</h2>
+      <p class="modal-sub">Secure slot reservation — sandbox simulation environment.</p>
+    </div>
+
+    <div class="payment-body">
+      <div class="sim-badge">
+        <div class="sim-dot"></div>
+        <span><strong>SANDBOX MODE</strong> — Do not enter real payment data.</span>
+      </div>
+
+      <div class="pay-summary">
+        <div class="pay-row">
+          <span id="payment-format-label">Individual Entry Slot</span>
+          <span id="payment-format-price">&#8377;500.00</span>
+        </div>
+        <div class="pay-row">
+          <span>Taxes &amp; Processing</span>
+          <span>&#8377;0.00</span>
+        </div>
+        <div class="pay-row total">
+          <span>Total Due</span>
+          <span id="payment-total-price">&#8377;500.00</span>
+        </div>
+      </div>
+
+      <div class="dummy-fields">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label">Test Card Number</label>
+          <input type="text" class="form-input" value="4111 2222 3333 4444" disabled aria-disabled="true">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Expiry</label>
+            <input type="text" class="form-input" value="12/29" disabled aria-disabled="true">
+          </div>
+          <div class="form-group">
+            <label class="form-label">CVV</label>
+            <input type="text" class="form-input" value="123" disabled aria-disabled="true">
+          </div>
+        </div>
+      </div>
+
+      <div class="pay-loader" id="payment-loader">
+        <div class="pay-bar-wrap">
+          <div class="payment-progress-bar"></div>
+        </div>
+        <span class="payment-status-text">Simulating authorization…</span>
+      </div>
+
+      <button id="pay-confirm-btn" class="btn btn-primary" style="width: 100%;">
+        Pay Commitment Fee &rarr;
+      </button>
+    </div>
+  </div><!-- /payment-modal -->
+
+
+  <!-- ═══════════════════════════════════════════
+       SUCCESS MODAL
+  ══════════════════════════════════════════════ -->
+  <div id="success-modal" class="modal" role="dialog" aria-modal="true" aria-live="polite" aria-labelledby="success-heading">
+
+    <div class="success-check">
+      <svg class="success-checkmark" viewBox="0 0 52 52" aria-label="Payment successful" role="img">
+        <circle class="success-checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+        <path class="success-checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+      </svg>
+    </div>
+
+    <div class="modal-head" style="text-align: center;">
+      <h2 class="modal-title" id="success-heading">SEAT CONFIRMED</h2>
+      <p class="modal-sub">Your transaction is complete. See you at Let's Enterprise Space!</p>
+    </div>
+
+    <div class="success-details">
+      <div class="success-row">
+        <span>Registration ID</span>
+        <span id="success-id" class="success-id-val">FSR-00000</span>
+      </div>
+      <div class="success-row">
+        <span>Sprint Date</span>
+        <span>Saturday, July 18, 2026</span>
+      </div>
+      <div class="success-row">
+        <span>Reporting Time</span>
+        <span>8:45 AM sharp</span>
+      </div>
+      <div class="success-row">
+        <span>Location</span>
+        <span>Let's Enterprise Space, Pune</span>
+      </div>
+    </div>
+
+    <div class="success-next">
+      <h4>What happens next?</h4>
+      <ul>
+        <li><strong>Check your email</strong> — confirmation receipt + teammate brief on its way.</li>
+        <li><strong>Zoho CRM synced</strong> — your tag <code>Sprint-Fee-Paid</code> is live.</li>
+        <li><strong>Relocation preference</strong> — your filter tag has been updated in the pipeline.</li>
+      </ul>
+    </div>
+
+    <button id="success-done-btn" class="btn btn-primary">Got it, see you there &#x1F91D;</button>
+
+  </div><!-- /success-modal -->
+
+
+  <!-- Scripts — GSAP must load before app.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="zoho_config.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
