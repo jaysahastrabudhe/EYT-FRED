@@ -337,9 +337,13 @@ app.get('/api/verify-order/:orderId', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`\n==================================================`);
-  console.log(`  Let's Enterprise Founder's Sprint Web Server`);
-  console.log(`  Running on http://localhost:${PORT}`);
-  console.log(`==================================================\n`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n==================================================`);
+    console.log(`  Let's Enterprise Founder's Sprint Web Server`);
+    console.log(`  Running on http://localhost:${PORT}`);
+    console.log(`==================================================\n`);
+  });
+}
+
+module.exports = app;
