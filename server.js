@@ -223,7 +223,7 @@ async function sendConfirmationEmail(email, name, orderId, type, amount) {
 
   try {
     const res = await axios.post('https://api.resend.com/emails', {
-      from:    "Founder's Sprint <sprint@letsenterprise.in>",
+      from:    "Founder's Sprint <hi@letsenterprise.in>",
       to:      [email],
       subject: `You're in, ${firstName} — Founder's Sprint · July 18 🎟️`,
       html
