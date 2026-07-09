@@ -345,12 +345,20 @@ app.get('/api/test-notifications', async (req, res) => {
   const phone = req.query.phone || '917410788808';
   const email = req.query.email || 'hi@letsenterprise.in';
   const testOrderId = 'TEST' + Date.now().toString(36).slice(-5).toUpperCase();
+  const envCheck = {
+    TWILIO_ACCOUNT_SID:              !!process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN:               !!process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_MESSAGING_SERVICE_SID:    !!process.env.TWILIO_MESSAGING_SERVICE_SID,
+    TWILIO_SPRINT_CONFIRM_TEMPLATE_SID: !!process.env.TWILIO_SPRINT_CONFIRM_TEMPLATE_SID,
+  };
+  console.log('[ENV CHECK]', JSON.stringify(envCheck));
   const [wa, em] = await Promise.allSettled([
     sendWhatsApp(phone, name, testOrderId),
     sendConfirmationEmail(email, name, testOrderId, 'individual', 500)
   ]);
   res.json({
     order_id: testOrderId,
+    env: envCheck,
     whatsapp: wa.status === 'fulfilled' ? 'sent (no error)' : (wa.reason?.message || 'failed'),
     email:    em.status === 'fulfilled' ? 'sent (no error)' : (em.reason?.message || 'failed')
   });
