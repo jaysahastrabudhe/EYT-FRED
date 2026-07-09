@@ -256,6 +256,24 @@ function purgeStalePending() {
   });
 }
 
+// POST /api/test-notifications
+app.post('/api/test-notifications', async (req, res) => {
+  const { phone, email, name } = req.body;
+  if (!phone || !email || !name) {
+    return res.status(400).json({ error: 'Missing phone, email, or name' });
+  }
+  const testOrderId = 'TEST' + Date.now().toString(36).slice(-5).toUpperCase();
+  const [wa, em] = await Promise.allSettled([
+    sendWhatsApp(phone, name, testOrderId),
+    sendConfirmationEmail(email, name, testOrderId, 'individual', 500)
+  ]);
+  res.json({
+    order_id: testOrderId,
+    whatsapp: wa.status === 'fulfilled' ? 'ok' : wa.reason?.message || 'failed',
+    email:    em.status === 'fulfilled' ? 'ok' : em.reason?.message || 'failed'
+  });
+});
+
 // POST /api/create-order
 app.post('/api/create-order', async (req, res) => {
   const data = req.body;
