@@ -466,6 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Move to payment simulation stage
     if (typeof mixpanel !== 'undefined') { mixpanel.track('Checkout Started', { type: type }); }
     if (typeof fbq !== 'undefined') { fbq('track', 'InitiateCheckout', { currency: 'INR', value: type === 'team' ? 1000 : 500 }); }
+    if (typeof gtag !== 'undefined') { gtag('event', 'begin_checkout', { currency: 'INR', value: type === 'team' ? 1000 : 500 }); }
     closeModal(regModal);
     
     // Update Payment summary details (Adjusted total price to ₹1,000 for team of 3)
@@ -522,6 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.success) {
           if (typeof mixpanel !== 'undefined') { mixpanel.track('Registration Successful', { orderId: returnOrderId }); }
           if (typeof fbq !== 'undefined') { fbq('track', 'CompleteRegistration', { currency: 'INR', value: data.amount || 0 }); }
+          if (typeof gtag !== 'undefined') { gtag('event', 'purchase', { transaction_id: returnOrderId, currency: 'INR', value: data.amount || 0 }); }
           document.getElementById('success-id').textContent = returnOrderId;
           setTimeout(() => {
             openModal(successModal);
