@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const stickyCtaBar = document.getElementById('sticky-cta-bar');
   const stickyRegisterBtn = document.getElementById('sticky-register-btn');
   
+  // Track Page View
+  if (typeof mixpanel !== 'undefined') {
+    mixpanel.track('Page Viewed');
+  }
+  
   const regModal = document.getElementById('reg-modal');
   const paymentModal = document.getElementById('payment-modal');
   const successModal = document.getElementById('success-modal');
@@ -164,15 +169,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  stickyRegisterBtn.addEventListener('click', () => openModal(regModal));
-  bottomCtaBtn.addEventListener('click', () => openModal(regModal));
+  const trackRegStart = (source) => {
+    if (typeof mixpanel !== 'undefined') { mixpanel.track('Registration Started', { source: source }); }
+    openModal(regModal);
+  };
+
+  stickyRegisterBtn.addEventListener('click', () => trackRegStart('sticky_nav'));
+  bottomCtaBtn.addEventListener('click', () => trackRegStart('bottom_cta'));
   if (heroCta) {
-    heroCta.addEventListener('click', () => openModal(regModal));
+    heroCta.addEventListener('click', () => trackRegStart('hero_cta'));
   }
   // Nav CTA button (new in redesign)
   const navCtaBtn = document.getElementById('nav-cta-btn');
   if (navCtaBtn) {
-    navCtaBtn.addEventListener('click', () => openModal(regModal));
+    navCtaBtn.addEventListener('click', () => trackRegStart('main_nav'));
   }
 
   /* ==========================================================================
@@ -257,6 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Toggle teammate fields based on registration type (with new pricing ₹1,000 for team of 3)
   regTypeSelect.addEventListener('change', (e) => {
     const isTeam = e.target.value === 'team';
+    if (typeof mixpanel !== 'undefined') { mixpanel.track('Entry Type Selected', { type: e.target.value }); }
     
     if (isTeam) {
       teammatesContainer.style.display = 'block';
@@ -453,6 +464,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Move to payment simulation stage
+    if (typeof mixpanel !== 'undefined') { mixpanel.track('Checkout Started', { type: type }); }
+    if (typeof fbq !== 'undefined') { fbq('track', 'InitiateCheckout', { currency: 'INR', value: type === 'team' ? 1000 : 500 }); }
     closeModal(regModal);
     
     // Update Payment summary details (Adjusted total price to ₹1,000 for team of 3)
@@ -507,6 +520,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(r => r.json())
       .then(data => {
         if (data.success) {
+          if (typeof mixpanel !== 'undefined') { mixpanel.track('Registration Successful', { orderId: returnOrderId }); }
+          if (typeof fbq !== 'undefined') { fbq('track', 'CompleteRegistration', { currency: 'INR', value: data.amount || 0 }); }
           document.getElementById('success-id').textContent = returnOrderId;
           setTimeout(() => {
             openModal(successModal);
