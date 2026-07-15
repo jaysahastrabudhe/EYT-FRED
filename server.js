@@ -166,7 +166,7 @@ async function sendConfirmationEmail(email, name, orderId, type, amount) {
                   <tr>
                     <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
                       <span style="font-size:12px;color:#6b6b8a;text-transform:uppercase;letter-spacing:1px;">Sprint Date</span><br>
-                      <span style="font-size:15px;color:#e8e8f0;">Saturday, July 18, 2026</span>
+                      <span style="font-size:15px;color:#e8e8f0;">Wednesday, July 22, 2026</span>
                     </td>
                   </tr>
                   <tr>
@@ -195,7 +195,7 @@ async function sendConfirmationEmail(email, name, orderId, type, amount) {
               </tr>
               <tr>
                 <td style="padding:8px 0;font-size:14px;color:#b0b0c8;line-height:1.5;">
-                  <span style="color:#0061E3;font-weight:700;">02 &mdash;</span> Arrive at Let's Enterprise Space by 8:45 AM on July 18 with a laptop and charger.
+                  <span style="color:#0061E3;font-weight:700;">02 &mdash;</span> Arrive at Let's Enterprise Space by 8:45 AM on July 22 with a laptop and charger.
                 </td>
               </tr>
               <tr>
@@ -225,7 +225,7 @@ async function sendConfirmationEmail(email, name, orderId, type, amount) {
     const res = await axios.post('https://api.resend.com/emails', {
       from:    "Founder's Sprint <hi@letsenterprise.in>",
       to:      [email],
-      subject: `You're in, ${firstName} — Founder's Sprint · July 18 🎟️`,
+      subject: `You're in, ${firstName} — Founder's Sprint · July 22 🎟️`,
       html
     }, {
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' }

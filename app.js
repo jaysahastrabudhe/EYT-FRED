@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   
   function updateCountdown() {
-    const targetDate = new Date('2026-07-18T09:00:00+05:30').getTime(); // Space Pune time zone
+    const targetDate = new Date('2026-07-22T09:00:00+05:30').getTime(); // Space Pune time zone
     const now = new Date().getTime();
     const difference = targetDate - now;
 
@@ -343,15 +343,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return isNaN(parsed.getTime()) ? null : parsed;
   }
 
-  // Age Gate helper function: strictly 17-19 on July 18, 2026
+  // Age Gate helper function: strictly 17-19 on July 22, 2026
   function checkAgeGate(dobString) {
     if (!dobString) return false;
     const dob = parseDateString(dobString);
     if (!dob) return false;
     
-    // July 18, 2026 event day DOB bounds (month index 6 = July):
-    const minDob = new Date(2006, 6, 19); // 19 years old (turns 20 on July 18)
-    const maxDob = new Date(2009, 6, 18); // 17 years old (turns 17 on July 18)
+    // July 22, 2026 event day DOB bounds (month index 6 = July):
+    const minDob = new Date(2006, 6, 23); // 19 years old (turns 20 on July 22)
+    const maxDob = new Date(2009, 6, 22); // 17 years old (turns 17 on July 22)
     
     return dob >= minDob && dob <= maxDob;
   }
