@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
      DYNAMIC REGISTRATION FORM
      ========================================================================== */
   
-  // Toggle teammate fields based on registration type (with new pricing ₹1,000 for team of 3)
+  // Toggle teammate fields based on registration type
   regTypeSelect.addEventListener('change', (e) => {
     const isTeam = e.target.value === 'team';
     if (typeof mixpanel !== 'undefined') { mixpanel.track('Entry Type Selected', { type: e.target.value }); }
