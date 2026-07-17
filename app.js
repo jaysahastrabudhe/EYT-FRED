@@ -14,20 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   const regModal = document.getElementById('reg-modal');
-  const paymentModal = document.getElementById('payment-modal');
   const successModal = document.getElementById('success-modal');
   const modalBackdrop = document.getElementById('modal-backdrop');
   
   const regClose = document.getElementById('reg-modal-close');
-  const paymentClose = document.getElementById('payment-modal-close');
   
   const regForm = document.getElementById('reg-form');
   const regTypeSelect = document.getElementById('reg-type');
   const teammatesContainer = document.getElementById('teammates-container');
-  const priceDisplay = document.getElementById('price-display');
   
-  const payConfirmBtn = document.getElementById('pay-confirm-btn');
-  
+  const regSubmitBtn = document.getElementById('reg-submit-btn');
   const successDoneBtn = document.getElementById('success-done-btn');
   
   // Registration data cached during steps
@@ -271,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (isTeam) {
       teammatesContainer.style.display = 'block';
-      priceDisplay.textContent = '₹1,000'; // Updated price for team of 3
       
       if (isGsapLoaded) {
         // GSAP animate open
@@ -288,7 +283,6 @@ document.addEventListener('DOMContentLoaded', () => {
         field.setAttribute('required', 'true');
       });
     } else {
-      priceDisplay.textContent = '₹500'; // Solo price
       
       if (isGsapLoaded) {
         // GSAP animate close
@@ -463,43 +457,51 @@ document.addEventListener('DOMContentLoaded', () => {
       ];
     }
 
-    // Move to payment simulation stage
-    if (typeof mixpanel !== 'undefined') { mixpanel.track('Checkout Started', { type: type }); }
-    if (typeof fbq !== 'undefined') { fbq('track', 'InitiateCheckout', { currency: 'INR', value: type === 'team' ? 1000 : 500 }); }
-    if (typeof gtag !== 'undefined') { gtag('event', 'begin_checkout', { currency: 'INR', value: type === 'team' ? 1000 : 500 }); }
-    closeModal(regModal);
-    
-    // Update Payment summary details (Adjusted total price to ₹1,000 for team of 3)
-    document.getElementById('payment-format-label').textContent = type === 'team' ? 'Team of 3 Seats' : 'Individual Seat';
-    document.getElementById('payment-format-price').textContent = type === 'team' ? '₹1,000' : '₹500';
-    document.getElementById('payment-total-price').textContent = type === 'team' ? '₹1,000' : '₹500';
-    
-    setTimeout(() => {
-      openModal(paymentModal);
-    }, 300);
-  });
+    // Update Submit Button State
+    regSubmitBtn.disabled = true;
+    regSubmitBtn.textContent = 'Registering...';
 
-  // Cashfree payment — create server-side order, then redirect to hosted checkout
-  payConfirmBtn.addEventListener('click', async () => {
-    payConfirmBtn.disabled = true;
-    payConfirmBtn.textContent = 'Creating order…';
-
-    try {
-      const res = await fetch('/api/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(registrationData)
-      });
-      const { payment_session_id, error } = await res.json();
-      if (!payment_session_id) throw new Error(error || 'Order creation failed');
-
-      const cashfree = Cashfree({ mode: 'production' });
-      cashfree.checkout({ paymentSessionId: payment_session_id, redirectTarget: '_self' });
-    } catch (err) {
-      payConfirmBtn.disabled = false;
-      payConfirmBtn.textContent = 'Pay Now — Secure Gateway →';
-      alert('Could not initiate payment. Please try again or contact support.');
-    }
+    // Submit Registration Data to Backend
+    fetch('/api/register-free', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(registrationData)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        // Tracking: Registration Successful
+        if (typeof mixpanel !== 'undefined') { mixpanel.track('Registration Successful', { orderId: data.order_id }); }
+        if (typeof fbq !== 'undefined') { fbq('track', 'CompleteRegistration', { currency: 'INR', value: 0 }); }
+        if (typeof gtag !== 'undefined') { gtag('event', 'purchase', { transaction_id: data.order_id, currency: 'INR', value: 0 }); }
+        
+        document.getElementById('success-id').textContent = data.order_id;
+        
+        closeModal(regModal);
+        setTimeout(() => {
+          openModal(successModal);
+          if (isGsapLoaded) {
+            gsap.fromTo('.success-checkmark__circle',
+              { strokeDashoffset: 166 },
+              { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' }
+            );
+            gsap.fromTo('.success-checkmark__check',
+              { strokeDashoffset: 48 },
+              { strokeDashoffset: 0, duration: 0.5, delay: 0.4, ease: 'power2.out' }
+            );
+          }
+        }, 300);
+      } else {
+        alert('Registration failed. Please try again or contact support.');
+        regSubmitBtn.disabled = false;
+        regSubmitBtn.textContent = 'Complete Registration &rarr;';
+      }
+    })
+    .catch(() => {
+      alert('Could not connect to the server. Please try again later.');
+      regSubmitBtn.disabled = false;
+      regSubmitBtn.textContent = 'Complete Registration &rarr;';
+    });
   });
 
   // Success Done Click
@@ -507,45 +509,9 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModal(successModal);
     regForm.reset();
     teammatesContainer.style.display = 'none';
-    priceDisplay.textContent = '₹500';
-    payConfirmBtn.disabled = false;
-    payConfirmBtn.textContent = 'Pay Now — Secure Gateway →';
+    regSubmitBtn.disabled = false;
+    regSubmitBtn.textContent = 'Complete Registration &rarr;';
   });
-
-  // Handle Cashfree return URL (?order_id=...)
-  const urlParams = new URLSearchParams(window.location.search);
-  const returnOrderId = urlParams.get('order_id');
-  if (returnOrderId) {
-    window.history.replaceState({}, document.title, window.location.pathname);
-    fetch(`/api/verify-order/${returnOrderId}`)
-      .then(r => r.json())
-      .then(data => {
-        if (data.success) {
-          if (typeof mixpanel !== 'undefined') { mixpanel.track('Registration Successful', { orderId: returnOrderId }); }
-          if (typeof fbq !== 'undefined') { fbq('track', 'CompleteRegistration', { currency: 'INR', value: data.amount || 0 }); }
-          if (typeof gtag !== 'undefined') { gtag('event', 'purchase', { transaction_id: returnOrderId, currency: 'INR', value: data.amount || 0 }); }
-          document.getElementById('success-id').textContent = returnOrderId;
-          setTimeout(() => {
-            openModal(successModal);
-            if (isGsapLoaded) {
-              gsap.fromTo('.success-checkmark__circle',
-                { strokeDashoffset: 166 },
-                { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' }
-              );
-              gsap.fromTo('.success-checkmark__check',
-                { strokeDashoffset: 48 },
-                { strokeDashoffset: 0, duration: 0.5, delay: 0.4, ease: 'power2.out' }
-              );
-            }
-          }, 400);
-        } else {
-          alert('Payment not completed. If you were charged, please contact support with order ID: ' + returnOrderId);
-        }
-      })
-      .catch(() => {
-        alert('Could not verify payment. Please contact support with order ID: ' + returnOrderId);
-      });
-  }
 
 
 });

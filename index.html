@@ -716,52 +716,10 @@
       </div><!-- /form-scroll -->
 
       <div class="modal-foot">
-        <div class="price-wrap">
-          <span class="price-lbl">Amount Payable</span>
-          <span class="price-val" id="price-display">&#8377;500</span>
-        </div>
-        <button type="submit" class="btn btn-primary">Proceed to Payment &rarr;</button>
+        <button type="submit" id="reg-submit-btn" class="btn btn-primary" style="width: 100%;">Complete Registration &rarr;</button>
       </div>
     </form>
   </div><!-- /reg-modal -->
-
-
-  <!-- ═══════════════════════════════════════════
-       PAYMENT MODAL
-  ══════════════════════════════════════════════ -->
-  <div id="payment-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pay-modal-heading">
-
-    <button class="modal-close" id="payment-modal-close" aria-label="Close payment">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-
-    <div class="modal-head">
-      <h2 class="modal-title" id="pay-modal-heading">SECURE CHECKOUT</h2>
-      <p class="modal-sub">Your seat is confirmed instantly on payment.</p>
-    </div>
-
-    <div class="payment-body">
-      <div class="pay-summary">
-        <div class="pay-row">
-          <span id="payment-format-label">Individual Entry Slot</span>
-          <span id="payment-format-price">&#8377;500</span>
-        </div>
-        <div class="pay-row">
-          <span>Taxes &amp; Processing</span>
-          <span>&#8377;0.00</span>
-        </div>
-        <div class="pay-row total">
-          <span>Total Due</span>
-          <span id="payment-total-price">&#8377;500</span>
-        </div>
-      </div>
-
-      <button id="pay-confirm-btn" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-        Pay Now — Secure Gateway &rarr;
-      </button>
-      <p class="pay-secure-note">Secured by Cashfree Payments &middot; UPI, Cards &amp; Netbanking accepted</p>
-    </div>
-  </div><!-- /payment-modal -->
 
 
   <!-- ═══════════════════════════════════════════
@@ -819,7 +777,6 @@
   <!-- Scripts — GSAP must load before app.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
   <script src="zoho_config.js"></script>
   <script src="app.js"></script>
 

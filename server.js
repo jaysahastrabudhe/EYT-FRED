@@ -57,9 +57,9 @@ async function submitZohoLead(data) {
     COB_Date_Of_Birth: data.lead.dob,
     Registration_Type: data.type === 'team' ? 'Team' : 'Individual',
     Lead_Source:       'Founder Sprint Landing Page',
-    Lead_Status:       'Sprint-Fee-Paid',
+    Lead_Status:       'Sprint-Registered',
     Description:       descriptionText,
-    Tag:               [{ name: 'Sprint-Fee-Paid' }, { name: 'Age-Verified' }]
+    Tag:               [{ name: 'Sprint-Registered' }, { name: 'Age-Verified' }]
   };
 
   const response = await axios.post(
@@ -109,9 +109,9 @@ async function sendWhatsApp(phone, name, orderId) {
   }
 }
 
-// ── Email (Resend) ────────────────────────────────────────────────────────────
-async function sendConfirmationEmail(email, name, orderId, type, amount) {
-  const apiKey = process.env.RESEND_API_KEY;
+// ── Email (Resend) ───────────────────────────────────────────────────────────
+async function sendConfirmationEmail(email, name, orderId, type) {
+  const apiKey    = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.log('[Email] RESEND_API_KEY missing — skipping email confirmation.');
     return;
@@ -159,8 +159,8 @@ async function sendConfirmationEmail(email, name, orderId, type, amount) {
                   </tr>
                   <tr>
                     <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-                      <span style="font-size:12px;color:#6b6b8a;text-transform:uppercase;letter-spacing:1px;">Entry Type</span><br>
-                      <span style="font-size:15px;color:#e8e8f0;">${typeLabel} &mdash; ₹${amount}</span>
+                      <span style="font-size:12px;color:#6b6b8a;text-transform:uppercase;letter-spacing:1px;">Registration Format</span><br>
+                      <span style="font-size:15px;color:#e8e8f0;">${typeLabel}</span>
                     </td>
                   </tr>
                   <tr>
@@ -236,110 +236,33 @@ async function sendConfirmationEmail(email, name, orderId, type, amount) {
   }
 }
 
-// ── Cashfree ─────────────────────────────────────────────────────────────────
-const CF_BASE = 'https://api.cashfree.com/pg';
-const CF_HEADERS = () => ({
-  'x-api-version':  '2023-08-01',
-  'x-client-id':    process.env.CF_APP_ID,
-  'x-client-secret': process.env.CF_SECRET_KEY,
-  'Content-Type':   'application/json'
-});
-
-// In-memory store: orderId → { registrationData, createdAt }
-const pendingRegistrations = new Map();
-
-// Purge entries older than 2 hours
-function purgeStalePending() {
-  const cutoff = Date.now() - 2 * 60 * 60 * 1000;
-  pendingRegistrations.forEach((val, key) => {
-    if (val.createdAt < cutoff) pendingRegistrations.delete(key);
-  });
-}
-
-// POST /api/create-order
-app.post('/api/create-order', async (req, res) => {
+// ── Free Registration ────────────────────────────────────────────────────────
+app.post('/api/register-free', async (req, res) => {
   const data = req.body;
   if (!data?.lead?.name || !data?.lead?.email || !data?.lead?.phone) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
-  purgeStalePending();
-
-  const amount   = data.type === 'team' ? 1000 : 500;
-  const orderId  = `FSR${Date.now().toString(36).slice(-5).toUpperCase()}`;
-  const origin   = req.headers.origin || `${req.protocol}://${req.headers.host}`;
-  const phone    = data.lead.phone.replace(/\D/g, '').slice(-10);
-  const customerId = data.lead.email.replace(/[^a-zA-Z0-9_]/g, '_').slice(0, 50);
+  const orderId = `FSR${Date.now().toString(36).slice(-5).toUpperCase()}`;
 
   try {
-    const cfRes = await axios.post(`${CF_BASE}/orders`, {
-      order_id:       orderId,
-      order_amount:   amount,
-      order_currency: 'INR',
-      customer_details: {
-        customer_id:    customerId,
-        customer_name:  data.lead.name,
-        customer_email: data.lead.email,
-        customer_phone: phone
-      },
-      order_meta: {
-        return_url: `${origin}/?order_id=${orderId}`
-      }
-    }, { headers: CF_HEADERS() });
-
-    pendingRegistrations.set(orderId, { data, createdAt: Date.now() });
-
-    res.json({
-      payment_session_id: cfRes.data.payment_session_id,
-      order_id: orderId
+    const results = await Promise.allSettled([
+      submitZohoLead(data),
+      sendWhatsApp(data.lead.phone, data.lead.name, orderId),
+      sendConfirmationEmail(data.lead.email, data.lead.name, orderId, data.type)
+    ]);
+    const labels = ['Zoho', 'WhatsApp', 'Email'];
+    results.forEach((r, i) => {
+      if (r.status === 'rejected')
+        console.error(`${labels[i]} failed for ${orderId}:`, r.reason?.message);
     });
+
+    res.json({ success: true, order_id: orderId });
   } catch (err) {
-    const detail = err.response?.data || err.message;
-    console.error('Cashfree order creation failed:', detail);
-    res.status(500).json({ error: 'Could not create payment order.', details: detail });
+    console.error('Registration failed:', err.message);
+    res.status(500).json({ error: 'Registration failed.' });
   }
 });
-
-// GET /api/verify-order/:orderId
-app.get('/api/verify-order/:orderId', async (req, res) => {
-  const { orderId } = req.params;
-  try {
-    const cfRes = await axios.get(`${CF_BASE}/orders/${orderId}`, { headers: CF_HEADERS() });
-    const { order_status, order_amount } = cfRes.data;
-
-    if (order_status !== 'PAID') {
-      return res.json({ success: false, status: order_status });
-    }
-
-    // Payment confirmed — await all post-payment tasks before responding
-    // (Vercel serverless kills background work after res.json, so we must await)
-    const pending = pendingRegistrations.get(orderId);
-    if (pending) {
-      pendingRegistrations.delete(orderId);
-      const { data } = pending;
-      const amount = data.type === 'team' ? 1000 : 500;
-
-      const results = await Promise.allSettled([
-        submitZohoLead(data),
-        sendWhatsApp(data.lead.phone, data.lead.name, orderId),
-        sendConfirmationEmail(data.lead.email, data.lead.name, orderId, data.type, amount)
-      ]);
-      const labels = ['Zoho', 'WhatsApp', 'Email'];
-      results.forEach((r, i) => {
-        if (r.status === 'rejected')
-          console.error(`${labels[i]} failed for ${orderId}:`, r.reason?.message);
-      });
-    }
-
-    res.json({ success: true, order_id: orderId, amount: order_amount });
-  } catch (err) {
-    const detail = err.response?.data || err.message;
-    console.error('Payment verification failed:', detail);
-    res.status(500).json({ error: 'Verification failed.', details: detail });
-  }
-});
-
-
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`\n==================================================`);
