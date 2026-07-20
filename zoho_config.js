@@ -30,10 +30,10 @@ window.ZOHO_CONFIG = {
     registrationType: 'Registration_Type', // Custom Field: "Individual" or "Team"
     
     // Custom tags or flags we want to add to Zoho CRM
-    // These tags map to: Sprint Attended, Priority Review, Relocation-Confirmed, Sprint-Fee-Paid
+    // These tags map to registration and attendance lifecycle states.
     leadSource: 'Lead Source', // Set to "Founder Sprint Landing Page"
     description: 'Description', // Save teammates info here if registering as team
-    leadStatus: 'Lead Status', // Set to "Sprint-Fee-Paid"
-    leadTags: 'Tag' // Zoho Lead tags (comma-separated string, e.g. "Sprint-Fee-Paid, Relocation-Confirmed")
+    leadStatus: 'Lead Status', // Set to "Sprint-Registered"
+    leadTags: 'Tag' // Zoho Lead tags (comma-separated string, e.g. "Sprint-Registered, Age-Verified")
   }
 };

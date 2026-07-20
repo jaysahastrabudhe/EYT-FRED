@@ -472,8 +472,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.success) {
         // Tracking: Registration Successful
         if (typeof mixpanel !== 'undefined') { mixpanel.track('Registration Successful', { orderId: data.order_id }); }
-        if (typeof fbq !== 'undefined') { fbq('track', 'CompleteRegistration', { currency: 'INR', value: 0 }); }
-        if (typeof gtag !== 'undefined') { gtag('event', 'purchase', { transaction_id: data.order_id, currency: 'INR', value: 0 }); }
+        if (typeof fbq !== 'undefined') { fbq('track', 'CompleteRegistration'); }
+        if (typeof gtag !== 'undefined') { gtag('event', 'sign_up', { method: type }); }
         
         document.getElementById('success-id').textContent = data.order_id;
         
